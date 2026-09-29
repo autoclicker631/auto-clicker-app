@@ -51,7 +51,7 @@ $headers = @{
     "Accept" = "application/vnd.github.v3+json"
 }
 
-$releaseBody = @{
+$releaseJson = @{
     tag_name = "v$VersionName"
     target_commitish = "main"
     name = "v$VersionName Release"
@@ -60,8 +60,10 @@ $releaseBody = @{
     prerelease = $false
 } | ConvertTo-Json
 
+$releaseBodyBytes = [System.Text.Encoding]::UTF8.GetBytes($releaseJson)
+
 Write-Host "📦 Creating GitHub Release tag: v$VersionName..." -ForegroundColor Yellow
-$releaseResponse = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/releases" -Method Post -Headers $headers -Body $releaseBody -ContentType "application/json"
+$releaseResponse = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/releases" -Method Post -Headers $headers -Body $releaseBodyBytes -ContentType "application/json; charset=utf-8"
 $uploadUrl = $releaseResponse.upload_url -replace '\{.*\}', '?name=app-debug.apk'
 
 # 4. Upload APK asset
@@ -87,7 +89,7 @@ $versionJson = @{
     publishDate = (Get-Date).ToString("yyyy-MM-dd")
 } | ConvertTo-Json -Depth 4
 
-Set-Content "version.json" $versionJson
+[System.IO.File]::WriteAllText("version.json", $versionJson, [System.Text.Encoding]::UTF8)
 Write-Host "✓ Updated version.json" -ForegroundColor Green
 
 # 6. Git commit and push
