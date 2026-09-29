@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core Monochrome -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Deep Luxury OLED Dark Theme -->
+    <color name="bg_root">#090B10</color>
+    <color name="bg_dark">#090B10</color>
+    <color name="bg_surface">#11151F</color>
+    <color name="surface_dark">#11151F</color>
+    <color name="bg_surface_elevated">#181E2C</color>
+    <color name="bg_surface_highlight">#222B3D</color>
+    <color name="border_subtle">#1F2839</color>
+    <color name="border_active">#3B4968</color>
+    <color name="card_stroke">#1F2839</color>
+    
+    <!-- Primary Neon & Violet Glows -->
+    <color name="primary">#7C3AED</color>
+    <color name="primary_variant">#5B21B6</color>
+    <color name="primary_light">#A78BFA</color>
+    <color name="primary_dark">#5B21B6</color>
+    <color name="primary_glow">#337C3AED</color>
+    
+    <!-- Secondary Cyan Accents -->
+    <color name="secondary">#06B6D4</color>
+    <color name="secondary_variant">#0891B2</color>
+    <color name="cyan_accent">#06B6D4</color>
+    <color name="cyan_dark">#0891B2</color>
+    <color name="cyan_light">#67E8F9</color>
+    <color name="cyan_glow">#3306B6D4</color>
+
+    <!-- Status & Functional Accents -->
+    <color name="emerald_green">#10B981</color>
+    <color name="emerald_glow">#3310B981</color>
+    <color name="accent_green">#10B981</color>
+    <color name="accent_green_bg">#1A10B981</color>
+
+    <color name="amber_yellow">#F59E0B</color>
+    <color name="amber_glow">#33F59E0B</color>
+    <color name="accent_yellow">#F59E0B</color>
+
+    <color name="rose_red">#F43F5E</color>
+    <color name="rose_glow">#33F43F5E</color>
+    <color name="accent_red">#F43F5E</color>
+    <color name="accent_red_bg">#1AF43F5E</color>
+
+    <color name="accent_blue">#3B82F6</color>
+    <color name="accent_purple">#8B5CF6</color>
+
+    <!-- Typography Hierarchy -->
+    <color name="text_primary">#F8FAFC</color>
+    <color name="text_secondary">#94A3B8</color>
+    <color name="text_tertiary">#64748B</color>
+    <color name="text_muted">#475569</color>
+    <color name="text_hint">#64748B</color>
+    
+    <!-- Glassmorphism & Overlays -->
+    <color name="floating_bg">#F011151F</color>
+    <color name="overlay_panel_bg">#F011151F</color>
+    <color name="overlay_chip_bg">#251E2B45</color>
+    <color name="ripple_light">#20FFFFFF</color>
+    <color name="crosshair_color">#06B6D4</color>
+</resources>

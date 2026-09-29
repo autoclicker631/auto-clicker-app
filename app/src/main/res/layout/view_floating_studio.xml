@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootStudioOverlay"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    android:background="@android:color/transparent">
+
+    <!-- Container for Dynamically Added Numbered Target Points -->
+    <FrameLayout
+        android:id="@+id/flTargetPointsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layoutDirection="ltr" />
+
+    <!-- Draggable & Resizable Inspection Region Box -->
+    <FrameLayout
+        android:id="@+id/boxInspectionRegion"
+        android:layout_width="220dp"
+        android:layout_height="120dp"
+        android:layout_gravity="top|left"
+        android:layoutDirection="ltr"
+        android:background="@drawable/bg_region_box">
+
+        <!-- Top Header Pill in Box -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="4dp"
+            android:background="#CC06B6D4"
+            android:orientation="horizontal"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="منطقة الفحص 🔍 "
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRegionDimensions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="220x120"
+                android:textColor="@color/black"
+                android:textSize="9sp" />
+        </LinearLayout>
+
+        <!-- Resize Handle at Bottom-End Corner -->
+        <ImageView
+            android:id="@+id/ivRegionResizeHandle"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="bottom|end"
+            android:padding="4dp"
+            android:src="@drawable/ic_resize_handle"
+            android:contentDescription="Resize Region" />
+    </FrameLayout>
+
+    <!-- Top Quick Control Toolbar (Collapsible) -->
+    <LinearLayout
+        android:id="@+id/layoutTopToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#E611151F"
+        android:elevation="14dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="4dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="استوديو الشروط الذكي"
+            android:textColor="@color/text_primary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!-- Quick Add Target Circle -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnQuickAddTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:text="+ نقطة نقر"
+            android:textSize="10sp"
+            android:textColor="@color/white"
+            app:cornerRadius="16dp"
+            app:backgroundTint="@color/primary"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp" />
+
+        <!-- Quick Remove Last Target -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnQuickRemoveTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:text="- حذف نقطة"
+            android:textSize="10sp"
+            android:textColor="@color/text_secondary"
+            app:cornerRadius="16dp"
+            app:backgroundTint="@color/bg_surface_elevated"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp" />
+
+        <!-- Minimize Top Bar Button -->
+        <ImageButton
+            android:id="@+id/btnMinimizeTopBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="4dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_chevron_up"
+            app:tint="@color/cyan_accent"
+            android:contentDescription="Minimize Top Bar" />
+
+        <!-- Close Studio Button -->
+        <ImageButton
+            android:id="@+id/btnCloseStudio"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="2dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
+            app:tint="@color/rose_red"
+            android:contentDescription="Close" />
+    </LinearLayout>
+
+    <!-- Top Minimized Floating Pill (Visible when top bar is minimized) -->
+    <LinearLayout
+        android:id="@+id/layoutTopMinimizedPill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_pill_selected"
+        android:elevation="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="3dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="استوديو ▼"
+            android:textColor="@color/white"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Full Peek Floating Restore Button (Visible when all panels are hidden) -->
+    <LinearLayout
+        android:id="@+id/layoutPeekRestorePill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:background="#DD06B6D4"
+        android:elevation="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="6dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="👁️ إظهار لوحة التحكم"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Bottom Studio Configuration Console (Collapsible / Expandable) -->
+    <LinearLayout
+        android:id="@+id/layoutBottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#F811151F"
+        android:elevation="14dp"
+        android:orientation="vertical">
+
+        <!-- Collapse / Expand Toggle Bar Header -->
+        <LinearLayout
+            android:id="@+id/layoutToggleBottomPanel"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:background="#22FFFFFF"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+            <ImageView
+                android:id="@+id/ivToggleChevron"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_chevron_down"
+                app:tint="@color/cyan_accent"
+                android:contentDescription="Toggle" />
+
+            <TextView
+                android:id="@+id/tvToggleTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="▼ إخفاء لوحة الإعدادات"
+                android:textColor="@color/cyan_accent"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <!-- Peek Full Screen Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnPeekFullScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:layout_marginEnd="6dp"
+                android:text="👁️ معاينة الشاشة"
+                android:textSize="9sp"
+                android:textColor="@color/cyan_light"
+                app:cornerRadius="14dp"
+                app:backgroundTint="#3306B6D4"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp" />
+
+            <TextView
+                android:id="@+id/tvTargetPointsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_pill_selected"
+                android:paddingStart="8dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="2dp"
+                android:text="1 نقطة"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Collapsible Content -->
+        <LinearLayout
+            android:id="@+id/layoutCollapsibleContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- Condition Type Mode Tabs (Text vs Image Match) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/rgStudioConditionMode"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <RadioButton
+                        android:id="@+id/rbModeAlwaysOrText"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_pill_selected"
+                        android:button="@null"
+                        android:checked="true"
+                        android:gravity="center"
+                        android:text="📝 فحص نص"
+                        android:textColor="@color/white"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
+                    <RadioButton
+                        android:id="@+id/rbModeImage"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:button="@null"
+                        android:gravity="center"
+                        android:text="📸 فحص صورة"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <!-- Script Name & Condition Inputs -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etStudioScriptName"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:hint="📁 اسم السكربت (مثال: سكربت فورتنايت)..."
+                    android:inputType="text"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/cyan_light"
+                    android:textColorHint="@color/text_tertiary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Condition Inputs (Rule Name & Target Text) -->
+            <LinearLayout
+                android:id="@+id/layoutStudioTextInputs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/etStudioRuleName"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:hint="اسم الشرط..."
+                        android:inputType="text"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_tertiary"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/etStudioConditionText"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1.2"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:hint="النص المراد فحصه (اتركه فارغاً للدائم)..."
+                        android:inputType="text"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_tertiary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <!-- Text Match Helper & Inspect Button -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/cbExactMatch"
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_weight="1"
+                        android:text="تطابق تام (نفس النص بالضبط)"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp"
+                        android:checked="false" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnInspectVisibleTexts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="👀 ماذا يرى التطبيق؟"
+                        android:textColor="@color/cyan_light"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="@color/bg_surface_elevated"
+                        app:cornerRadius="16dp"
+                        app:strokeColor="@color/cyan_accent"
+                        app:strokeWidth="1dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Image Capture Section (Visible when rbModeImage is checked) -->
+            <LinearLayout
+                android:id="@+id/layoutStudioImageCapture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCaptureInspectionRegion"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="📸 التقاط صورة منطقة الفحص للشرط"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/cyan_dark"
+                    app:cornerRadius="20dp" />
+
+                <ImageView
+                    android:id="@+id/ivCapturedConditionPreview"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone"
+                    android:contentDescription="Condition Thumbnail" />
+            </LinearLayout>
+
+            <!-- Active Targets Summary Bar -->
+            <TextView
+                android:id="@+id/tvStudioActionsSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#22000000"
+                android:padding="6dp"
+                android:text="قائمة الإجراءات: 1. نقر بالمؤشر"
+                android:textColor="@color/cyan_light"
+                android:textSize="11sp" />
+
+            <!-- Test Condition & Save Rule Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTestCondition"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:text="⚡ تجربة الشرط الآن"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/cyan_dark"
+                    app:cornerRadius="22dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSaveStudioRule"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1.3"
+                    android:text="💾 حفظ في السيناريو ✓"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/emerald_green"
+                    app:cornerRadius="22dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Centered Target Configuration Popup Overlay Container with ScrollView for Landscape -->
+    <FrameLayout
+        android:id="@+id/flConfigPopupContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="16dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="6dp"
+        android:visibility="gone">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <include
+                android:id="@+id/includeTargetConfig"
+                layout="@layout/dialog_target_config"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+    </FrameLayout>
+
+    <!-- Full Screen Inspect & Test Results Modal Dialog Container -->
+    <FrameLayout
+        android:id="@+id/flInspectResultModalContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#B3000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingStart="20dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="12dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_card_dark"
+            android:elevation="24dp"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <!-- Modal Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvInspectModalIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔍"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/tvInspectModalTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:text="نتيجة الفحص"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/btnInspectModalClose"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_close"
+                    app:tint="@color/text_tertiary"
+                    android:contentDescription="Close" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/border_subtle" />
+
+            <!-- Scrollable Content -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:scrollbars="vertical">
+
+                <TextView
+                    android:id="@+id/tvInspectModalBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="5dp"
+                    android:text="محتوى النتائج..."
+                    android:textColor="@color/text_primary"
+                    android:textIsSelectable="true"
+                    android:textSize="13sp" />
+            </ScrollView>
+
+            <!-- Bottom Actions -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnInspectModalCopyFirst"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_weight="1.2"
+                    android:layout_marginEnd="8dp"
+                    android:text="📋 نسخ للشرط"
+                    android:textColor="@color/cyan_light"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/bg_surface_elevated"
+                    app:cornerRadius="21dp"
+                    app:strokeColor="@color/cyan_accent"
+                    app:strokeWidth="1dp"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnInspectModalOk"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_weight="1"
+                    android:text="حسناً"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@color/primary"
+                    app:cornerRadius="21dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>

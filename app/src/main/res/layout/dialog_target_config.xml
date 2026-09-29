@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/bg_card_dark"
+    android:elevation="20dp"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Header with Title, Coordinates, and Close -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_target"
+            app:tint="@color/cyan_accent"
+            android:contentDescription="Target" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvConfigTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="إعدادات النقطة #1"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvConfigCoords"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="الإحداثيات: X: 540 | Y: 1200"
+                android:textColor="@color/cyan_accent"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btnConfigClose"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
+            app:tint="@color/text_tertiary"
+            android:contentDescription="Close" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/border_subtle" />
+
+    <!-- Action Type Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="اختر نوع الإجراء للنقطة:"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <!-- Spacious Radio Group -->
+    <RadioGroup
+        android:id="@+id/rgActionType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
+
+        <RadioButton
+            android:id="@+id/rbActionClick"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:checked="true"
+            android:paddingStart="8dp"
+            android:text="👆 نقر لمس سريع (Click / Tap)"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/rbActionSwipe"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:paddingStart="8dp"
+            android:text="👉 سحب وتمرير على الشاشة (Swipe / Scroll)"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/rbActionLongPress"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:paddingStart="8dp"
+            android:text="⏱️ ضغط مطول ثانية واحدة (Long Press)"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/rbActionTypeText"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:paddingStart="8dp"
+            android:text="⌨️ كتابة نص في حقول الإدخال (Type Text)"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp" />
+
+        <RadioButton
+            android:id="@+id/rbActionDelay"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:paddingStart="8dp"
+            android:text="⏳ انتظار / تأخير زمني فقط (Delay)"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp" />
+    </RadioGroup>
+
+    <!-- Swipe Configuration Options (Visible when rbActionSwipe is checked) -->
+    <LinearLayout
+        android:id="@+id/layoutSwipeConfig"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="#22FFFFFF"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="اتجاه السحب من موقع النقطة:"
+            android:textColor="@color/cyan_light"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/rgSwipeDirection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbSwipeUp"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="⬆️ لأعلى"
+                android:textColor="@color/text_primary"
+                android:textSize="11sp" />
+
+            <RadioButton
+                android:id="@+id/rbSwipeDown"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="⬇️ لأسفل"
+                android:textColor="@color/text_primary"
+                android:textSize="11sp" />
+
+            <RadioButton
+                android:id="@+id/rbSwipeLeft"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="⬅️ يسار"
+                android:textColor="@color/text_primary"
+                android:textSize="11sp" />
+
+            <RadioButton
+                android:id="@+id/rbSwipeRight"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="➡️ يمين"
+                android:textColor="@color/text_primary"
+                android:textSize="11sp" />
+        </RadioGroup>
+
+        <!-- Swipe Distance & Duration -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="المسافة (px):"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+            <EditText
+                android:id="@+id/etSwipeDistance"
+                android:layout_width="65dp"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_pill_unselected"
+                android:gravity="center"
+                android:inputType="number"
+                android:text="400"
+                android:textColor="@color/cyan_accent"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="المدة (ms):"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+
+            <EditText
+                android:id="@+id/etSwipeDuration"
+                android:layout_width="65dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/bg_pill_unselected"
+                android:gravity="center"
+                android:inputType="number"
+                android:text="300"
+                android:textColor="@color/cyan_accent"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Text to Type Input (shown when Type Text is selected) -->
+    <EditText
+        android:id="@+id/etConfigTextToType"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_pill_unselected"
+        android:hint="اكتب النص الذي سيتم إرساله بالكيبورد..."
+        android:inputType="text"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_tertiary"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <!-- Delay Setting -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="#22FFFFFF"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="التأخير بعد هذه النقطة (ms):"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/etConfigDelayMs"
+            android:layout_width="90dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_pill_unselected"
+            android:gravity="center"
+            android:inputType="number"
+            android:text="300"
+            android:textColor="@color/cyan_accent"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Quick Delay Presets -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnDelay100"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/surface_dark"
+            android:padding="0dp"
+            android:text="100ms"
+            android:textColor="@color/text_primary"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/btnDelay300"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/surface_dark"
+            android:padding="0dp"
+            android:text="300ms"
+            android:textColor="@color/text_primary"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/btnDelay500"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/surface_dark"
+            android:padding="0dp"
+            android:text="500ms"
+            android:textColor="@color/text_primary"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/btnDelay1000"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/surface_dark"
+            android:padding="0dp"
+            android:text="1s"
+            android:textColor="@color/text_primary"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/btnDelay2000"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/surface_dark"
+            android:padding="0dp"
+            android:text="2s"
+            android:textColor="@color/text_primary"
+            android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- Bottom Actions (Delete & Confirm) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfigDeleteTarget"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:text="🗑️ حذف النقطة"
+            android:textColor="@color/rose_red"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/bg_surface_elevated"
+            app:cornerRadius="23dp"
+            app:strokeColor="@color/rose_red"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnConfigConfirm"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1.4"
+            android:text="✓ حفظ الإعداد"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/primary"
+            app:cornerRadius="23dp" />
+    </LinearLayout>
+
+</LinearLayout>

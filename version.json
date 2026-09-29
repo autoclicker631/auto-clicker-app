@@ -1,0 +1,10 @@
+{
+  "latestVersionCode": 1,
+  "latestVersionName": "1.0",
+  "minSupportedVersionCode": 1,
+  "isForceUpdate": false,
+  "title": "تحديث جديد متوفر 🚀",
+  "releaseNotes": "• إضافة ميزة السحب والتمرير (Swipe / Scroll)\n• إضافة نظام التحديث التلقائي داخل التطبيق\n• تحسين أداء استوديو الشروط الذكي وإمكانية إخفاء القوائم\n• عزل قراءة نصوص واجهة التطبيق عن الألعاب",
+  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.0.0/app-debug.apk",
+  "publishDate": "2026-09-29"
+}

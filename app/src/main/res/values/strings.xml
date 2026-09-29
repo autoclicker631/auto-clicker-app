@@ -1,0 +1,128 @@
+<resources>
+    <string name="app_name">AutoBot AI</string>
+    <string name="app_tagline">النقر الذكي ومحاكي لوحة المفاتيح الاحترافي</string>
+    <string name="app_description">النقر التلقائي الذكي ومحاكي لوحة المفاتيح مع الشروط المتقدمة</string>
+
+    <!-- Bottom Navigation Tabs -->
+    <string name="tab_dashboard">الرئيسية</string>
+    <string name="tab_rules">السيناريو</string>
+    <string name="tab_profiles">الحفظ والاستعادة</string>
+    <string name="tab_settings">الإعدادات</string>
+
+    <!-- Dashboard Hero Section -->
+    <string name="dashboard_welcome">لوحة التحكم السريعة</string>
+    <string name="dashboard_status_ready">النظام جاهز للعمل</string>
+    <string name="dashboard_status_running">الأداة نشطة الآن</string>
+    <string name="dashboard_btn_start">بدء تشغيل الأداة العائمة</string>
+    <string name="dashboard_btn_stop">إيقاف الأداة العائمة</string>
+    <string name="dashboard_current_profile">السيناريو النشط: %1$s</string>
+    <string name="dashboard_steps_count">%1$d شروط مبرمجة</string>
+
+    <!-- Mode Selector Cards -->
+    <string name="mode_card_title">وضع التشغيل</string>
+    <string name="mode_clicker_title">النقر التلقائي</string>
+    <string name="mode_clicker_sub">لمسات وسحب مباشر على الشاشة</string>
+    <string name="mode_keyboard_title">لوحة مفاتيح وهمية</string>
+    <string name="mode_keyboard_sub">إشارات كيبورد وكتابة نصوص حقيقية</string>
+    <string name="mode_hybrid_title">الوضع الهجين</string>
+    <string name="mode_hybrid_sub">دمج النقرات مع إشارات الكيبورد معاً</string>
+
+    <!-- Permissions Widget -->
+    <string name="perm_card_title">حالة الصلاحيات الأساسية</string>
+    <string name="perm_all_granted">جميع الصلاحيات مفعلة بنجاح ✓</string>
+    <string name="perm_some_missing">يرجى استكمال الصلاحيات المطلوبة</string>
+    <string name="perm_accessibility">إمكانية الوصول</string>
+    <string name="perm_overlay">الظهور فوق التطبيقات</string>
+    <string name="perm_battery">تجاهل تحسين البطارية</string>
+    <string name="perm_fix_all">إصلاح وتفعيل الصلاحيات</string>
+
+    <!-- Battery Guard -->
+    <string name="battery_card_title">مغلاق الطوارئ وحماية البطارية</string>
+    <string name="battery_card_desc">حماية هاتفك من النفاد بإيقاف الأتمتة وإغلاق كافة التطبيقات تلقائياً</string>
+    <string name="battery_threshold_format">إيقاف فوري عند وصول البطارية إلى: %1$d%%</string>
+    <string name="battery_current_format">المستوى الحالي: %1$d%%</string>
+    <string name="battery_close_apps_toggle">إغلاق كافة التطبيقات والعودة للرئيسية فوراً</string>
+
+    <!-- Rules & Flow Builder -->
+    <string name="rules_title">مخطط الشروط المتسلسلة</string>
+    <string name="rules_subtitle">يتم فحص كل شرط بالترتيب، وإذا لم يتحقق ينتقل مباشرة للشرط التالي</string>
+    <string name="rules_btn_add">+ إضافة خطوة جديدة</string>
+    <string name="rules_btn_presets">⚡ قوالب وسيناريوهات جاهزة</string>
+    <string name="rules_empty_title">لا توجد خطوات بعد</string>
+    <string name="rules_empty_desc">اضغط على إضافة خطوة أو اختر قالباً جاهزاً للبدء</string>
+    <string name="rule_step_format">الخطوة %1$d</string>
+
+    <!-- Rule Dialog -->
+    <string name="dialog_add_rule_title">إضافة خطوة جديدة</string>
+    <string name="dialog_edit_rule_title">تعديل الخطوة</string>
+    <string name="rule_name_label">اسم أو وصف الخطوة:</string>
+    <string name="rule_name_hint">اسم الخطوة (مثال: فحص زر التأكيد)</string>
+    <string name="rule_condition_type_label">نوع الشرط (متى يتم التنفيذ؟):</string>
+    <string name="rule_condition_label">الشرط (متى يتم التنفيذ؟)</string>
+    <string name="rule_action_type_label">الإجراء المطلوب تنفيذه:</string>
+    <string name="rule_action_label">الإجراء (ماذا ينفذ البرنامج؟)</string>
+    <string name="rule_target_text_hint">اكتب النص المطلوب البحث عنه على الشاشة...</string>
+    <string name="target_coord_x">إحداثي X:</string>
+    <string name="target_coord_y">إحداثي Y:</string>
+    <string name="text_to_type_hint">النص المراد كتابته بواسطة الكيبورد الوهمي...</string>
+    <string name="delay_after_ms_label">الانتظار بعد هذا الإجراء (مللي ثانية):</string>
+
+    <string name="cond_always">1. دائماً (تنفيذ فوري بدون فحص)</string>
+    <string name="cond_text_exists">2. إذا ظهر نص محدد على الشاشة</string>
+    <string name="cond_text_not_exists">3. إذا لم يظهر النص على الشاشة</string>
+    <string name="cond_image_exists">4. إذا ظهرت صورة أو أيقونة محددة</string>
+
+    <string name="act_click_coords">1. نقر على إحداثيات (X, Y)</string>
+    <string name="act_click_text">2. نقر مباشر على النص المكتشف</string>
+    <string name="act_type_text">3. كتابة نص (محاكي لوحة المفاتيح)</string>
+    <string name="act_send_key">4. إرسال زر كيبورد وهمي (Enter/Space...)</string>
+    <string name="act_swipe">5. سحب الشاشة (Swipe)</string>
+    <string name="act_delay">6. انتظار وتأخير زمني فقط</string>
+    <string name="act_close_all">7. إغلاق كل البرامج والرجوع للرئيسية</string>
+
+    <string name="hint_text_to_find">النص المطلوب البحث عنه على الشاشة...</string>
+    <string name="label_coords_picker">إحداثيات النقر (X, Y):</string>
+    <string name="btn_pick_from_screen">🎯 تحديد من الشاشة مباشرة</string>
+    <string name="label_delay">فترة الانتظار بعد التنفيذ (مللي ثانية):</string>
+    <string name="btn_save">حفظ الخطوة</string>
+    <string name="btn_cancel">إلغاء</string>
+    <string name="btn_delete">حذف</string>
+
+    <!-- Profiles & Backup Section -->
+    <string name="profiles_title">إدارة السيناريوهات والنسخ الاحتياطي</string>
+    <string name="profiles_subtitle">حفظ سيناريوهات متعددة لألعاب وتطبيقات مختلفة واستعادتها بسهولة</string>
+    <string name="btn_save_current_profile">💾 حفظ السيناريو الحالي كملف جديد</string>
+    <string name="btn_import_json">📥 استيراد سيناريو من ملف (JSON)</string>
+    <string name="btn_export_json">📤 تصدير ومشاركة السيناريو الحالي</string>
+    <string name="profiles_saved_list_header">السيناريوهات المحفوظة</string>
+    <string name="profile_dialog_name_hint">اكتب اسم السيناريو (مثلاً: تجميع نقاط تيك توك)</string>
+    <string name="profile_saved_toast">تم حفظ السيناريو بنجاح ✓</string>
+    <string name="profile_loaded_toast">تم تحميل السيناريو بنجاح ✓</string>
+    <string name="profile_exported_toast">تم نسخ كود السيناريو JSON إلى الحافظة ✓</string>
+    <string name="profile_imported_toast">تم استيراد السيناريو بنجاح ✓</string>
+
+    <!-- Settings Section -->
+    <string name="settings_title">الإعدادات المتقدمة</string>
+    <string name="settings_subtitle">تخصيص سلوك اللمس البشري، الأزرار العائمة، ونظام سامسونج</string>
+    
+    <string name="setting_human_touch_title">محاكاة اللمس البشري (Anti-Detection)</string>
+    <string name="setting_human_touch_desc">إضافة عشوائية طفيفة على مكان النقر والوقت لمنع كشف البرنامج في الألعاب</string>
+    
+    <string name="setting_haptic_title">الاهتزاز اللمسي (Haptic Feedback)</string>
+    <string name="setting_haptic_desc">اهتزاز خفيف بالهاتف عند تنفيذ كل نقرة أو شرط</string>
+    
+    <string name="setting_overlay_opacity_title">شفافية الزر العائم</string>
+    <string name="setting_overlay_opacity_desc">التحكم في درجة وضوح الأداة فوق الشاشة</string>
+
+    <string name="setting_samsung_boost_title">تحسينات سامسونج One UI</string>
+    <string name="setting_samsung_boost_desc">ضبط إدارة الطاقة لضمان استمرار العمل حتى عند إطفاء الشاشة</string>
+    <string name="setting_open_samsung_battery">فتح إعدادات بطارية سامسونج</string>
+
+    <!-- Notifications & HUD -->
+    <string name="notification_channel_name">خدمة AutoBot AI</string>
+    <string name="notification_running_title">الأداة التلقائية قيد التشغيل</string>
+    <string name="notification_running_desc">اضغط للفتح والتحكم في إعدادات التطبيق</string>
+    <string name="hud_ready">جاهز</string>
+    <string name="hud_running">يعمل...</string>
+    <string name="hud_paused">موقوف مؤقتاً</string>
+</resources>

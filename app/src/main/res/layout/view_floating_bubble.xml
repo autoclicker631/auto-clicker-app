@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_floating_panel"
+    android:elevation="12dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="6dp">
+
+    <!-- Drag Handle / App Icon -->
+    <ImageView
+        android:id="@+id/ivFloatingDragHandle"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_touch"
+        app:tint="@color/secondary"
+        android:contentDescription="Drag" />
+
+    <!-- Status text or battery indicator -->
+    <TextView
+        android:id="@+id/tvFloatingStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="جاهز"
+        android:textColor="@color/text_primary"
+        android:textSize="12sp"
+        android:maxWidth="130dp"
+        android:singleLine="true" />
+
+    <!-- Play / Pause Action Button -->
+    <ImageButton
+        android:id="@+id/btnFloatingPlayPause"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_play"
+        app:tint="@color/accent_green"
+        android:contentDescription="Play" />
+
+    <!-- Target Coordinate Picker Button -->
+    <ImageButton
+        android:id="@+id/btnFloatingTargetPicker"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="4dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_target"
+        app:tint="@color/accent_yellow"
+        android:contentDescription="Target Picker" />
+
+    <!-- Open Settings App Button -->
+    <ImageButton
+        android:id="@+id/btnFloatingSettings"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="4dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_settings"
+        app:tint="@color/accent_blue"
+        android:contentDescription="Settings" />
+
+    <!-- Close Floating Widget Button -->
+    <ImageButton
+        android:id="@+id/btnFloatingClose"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_close"
+        app:tint="@color/accent_red"
+        android:contentDescription="Close" />
+</LinearLayout>

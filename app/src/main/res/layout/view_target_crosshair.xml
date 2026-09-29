@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#44000000">
+
+    <!-- Draggable Crosshair Target -->
+    <ImageView
+        android:id="@+id/ivCrosshairPointer"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/target_crosshair_drawable"
+        android:contentDescription="Crosshair" />
+
+    <!-- Info & Confirm Panel -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/bg_floating_panel"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvCapturedCoordinates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="X: 500 | Y: 1000"
+            android:textColor="@color/accent_green"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="اسحب المؤشر للنقطة المطلوبة ثم اضغط حفظ"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCancelCrosshair"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:text="إلغاء"
+                android:textColor="@color/text_secondary"
+                android:backgroundTint="@color/surface_dark" />
+
+            <Button
+                android:id="@+id/btnConfirmCrosshair"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="12dp"
+                android:text="حفظ الإحداثيات ✓"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/primary" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
