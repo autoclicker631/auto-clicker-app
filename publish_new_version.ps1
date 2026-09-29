@@ -36,14 +36,14 @@ $gradleContent = $gradleContent -replace 'versionName\s*=\s*"[^"]+"', "versionNa
 Set-Content $gradleFile $gradleContent -NoNewline
 Write-Host "✓ Updated app/build.gradle.kts" -ForegroundColor Green
 
-# 2. Build Release/Debug APK
-Write-Host "🔨 Building APK with Gradle..." -ForegroundColor Yellow
-.\gradlew.bat assembleDebug
+# 2. Build Release APK
+Write-Host "🔨 Building Release APK with Gradle..." -ForegroundColor Yellow
+.\gradlew.bat assembleRelease
 if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ Build failed!" -ForegroundColor Red
     exit 1
 }
-Write-Host "✓ APK built successfully" -ForegroundColor Green
+Write-Host "✓ Release APK built successfully" -ForegroundColor Green
 
 # 3. Create GitHub Release
 $headers = @{
@@ -64,11 +64,11 @@ $releaseBodyBytes = [System.Text.Encoding]::UTF8.GetBytes($releaseJson)
 
 Write-Host "📦 Creating GitHub Release tag: v$VersionName..." -ForegroundColor Yellow
 $releaseResponse = Invoke-RestMethod -Uri "https://api.github.com/repos/$repo/releases" -Method Post -Headers $headers -Body $releaseBodyBytes -ContentType "application/json; charset=utf-8"
-$uploadUrl = $releaseResponse.upload_url -replace '\{.*\}', '?name=app-debug.apk'
+$uploadUrl = $releaseResponse.upload_url -replace '\{.*\}', "?name=AutoClicker-v$VersionName.apk"
 
 # 4. Upload APK asset
-Write-Host "⬆️ Uploading APK to GitHub..." -ForegroundColor Yellow
-$apkPath = "app/build/outputs/apk/debug/app-debug.apk"
+Write-Host "⬆️ Uploading AutoClicker-v$VersionName.apk to GitHub..." -ForegroundColor Yellow
+$apkPath = "app/build/outputs/apk/release/app-release.apk"
 $uploadHeaders = @{
     "Authorization" = "token $token"
     "Content-Type" = "application/vnd.android.package-archive"
