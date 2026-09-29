@@ -4,7 +4,7 @@
   "minSupportedVersionCode": 1,
   "isForceUpdate": false,
   "title": "تحديث جديد متوفر 🚀",
-  "releaseNotes": "• إضافة ميزة السحب والتمرير (Swipe / Scroll)\n• إضافة نظام التحديث التلقائي داخل التطبيق\n• تحسين أداء استوديو الشروط الذكي وإمكانية إخفاء القوائم\n• عزل قراءة نصوص واجهة التطبيق عن الألعاب",
+  "releaseNotes": "• إضافة ميزة السحب والتمرير (Swipe / Scroll)\n• إضافة نظام التحديث التلقائي المباشر داخل التطبيق\n• تحسين أداء استوديو الشروط وإمكانية إخفاء كافة القوائم لمعاينة الشاشة\n• عزل كامل بين واجهة التطبيق وقراءة نصوص الألعاب",
   "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.0.0/app-debug.apk",
   "publishDate": "2026-09-29"
 }
