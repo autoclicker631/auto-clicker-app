@@ -1,10 +1,10 @@
 {
-  "latestVersionCode": 3,
-  "latestVersionName": "1.2.0",
-  "minSupportedVersionCode": 3,
+  "latestVersionCode": 4,
+  "latestVersionName": "1.2.1",
+  "minSupportedVersionCode": 4,
   "isForceUpdate": true,
-  "title": "تحديث جديد متوفر v1.2.0 🚀",
-  "releaseNotes": "• إصلاحات شاملة لنظام التحديث الإجباري ومنع التخطي\n• الاحتفاظ بملف التحديث المكتمل لتجنب إعادة التنزيل من جديد\n• حذف ملف التحديث تلقائياً بعد التثبيت لتوفير مساحة التخزين\n• تحسين استقرار وسرعة استجابة الأداة العائمة",
-  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.2.0/AutoClicker-v1.2.0.apk",
+  "title": "تحديث جديد متوفر v1.2.1 🚀",
+  "releaseNotes": "• إصلاح حزمة البناء وضمان مطابقة رقم الإصدار 1.2.1\n• تفعيل نظام التحديث الإجباري السريع\n• حذف ملفات التثبيت المؤقتة بعد التحديث",
+  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.2.1/AutoClicker-v1.2.1.apk",
   "publishDate": "2026-09-30"
 }
