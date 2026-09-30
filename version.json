@@ -1,10 +1,10 @@
 {
-  "latestVersionCode": 4,
-  "latestVersionName": "1.2.1",
-  "minSupportedVersionCode": 4,
+  "latestVersionCode": 5,
+  "latestVersionName": "1.2.2",
+  "minSupportedVersionCode": 5,
   "isForceUpdate": true,
-  "title": "تحديث جديد متوفر v1.2.1 🚀",
-  "releaseNotes": "• إصلاح حزمة البناء وضمان مطابقة رقم الإصدار 1.2.1\n• تفعيل نظام التحديث الإجباري السريع\n• حذف ملفات التثبيت المؤقتة بعد التحديث",
-  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.2.1/AutoClicker-v1.2.1.apk",
+  "title": "تحديث جديد متوفر v1.2.2 🚀",
+  "releaseNotes": "• تحسين محاكاة أحداث المفاتيح للألعاب (KeyEvent)\\n• إضافة خيار 'ضغط مفتاح + لمس احتياطي' للألعاب بدون Root\\n• معالجة ذكية للأجهزة التي لا تدعم إدخال المفاتيح برمجياً",
+  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.2.2/AutoClicker-v1.2.2.apk",
   "publishDate": "2026-09-30"
 }

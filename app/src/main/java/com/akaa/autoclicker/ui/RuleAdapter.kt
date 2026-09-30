@@ -56,6 +56,7 @@ class RuleAdapter(
                     ActionType.CLICK_DETECTED_TEXT -> "نقر على النص"
                     ActionType.TYPE_TEXT -> "كتابة: '${action.textToType}'"
                     ActionType.SEND_KEY_CODE -> "زر كيبورد [${action.keyCode}]"
+                    ActionType.GAME_KEY_OR_TOUCH -> "🎮 ألعاب: مفتاح/نقر (${action.clickX}, ${action.clickY})"
                     ActionType.SWIPE -> "سحب شاشة"
                     ActionType.DELAY_ONLY -> "تأخير زمني"
                     ActionType.CLOSE_RECENT_APPS -> "إغلاق التطبيقات"

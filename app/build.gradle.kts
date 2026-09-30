@@ -11,8 +11,8 @@ android {
         applicationId = "com.akaa.autoclicker"
         minSdk = 28
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.2.1"
+        versionCode = 5
+        versionName = "1.2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
