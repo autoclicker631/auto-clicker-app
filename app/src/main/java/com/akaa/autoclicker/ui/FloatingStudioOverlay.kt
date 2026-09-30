@@ -780,11 +780,38 @@ class FloatingStudioOverlay(
                             copyText = detected.firstOrNull()
                         )
                     } else {
-                        showInspectResultModal(
-                            "⚠️",
-                            "لم يتم اكتشاف نصوص",
-                            "❌ لم يتم العثور على أي نصوص في هذا المربع.\n\n👀 ما يراه التطبيق: لا توجد أي نصوص برمجية في منطقة الفحص.\n\n💡 ملاحظة هامة للألعاب (مثل فورتنايت): ألعاب 3D تكون الأزرار فيها رسومات GPU ثلاثية الأبعاد وليست نصوصاً؛ يرجى استخدام '📸 فحص صورة' أو '🎮 نقر مباشر على الشاشة'."
-                        )
+                        // No Accessibility texts found - try OCR
+                        CoroutineScope(Dispatchers.Main).launch {
+                            studioView?.visibility = View.INVISIBLE
+                            delay(160)
+                            val ocrResult = accService.findTextWithOCR(targetText, exactMatch, inspectionRect)
+                            studioView?.visibility = View.VISIBLE
+                            if (ocrResult.isFound) {
+                                val coords = ocrResult.coordinates!!
+                                showInspectResultModal(
+                                    "✅",
+                                    "نجح اختبار النص عبر OCR ($matchTypeLabel)",
+                                    "✅ تم العثور على النص عبر تحليل الصورة (OCR)!\n\n• الكلمة: '$targetText'\n• النص المكتشف: \"${ocrResult.matchedFullText}\"\n• المكان: X: ${coords.centerX()} | Y: ${coords.centerY()}\n• طريقة الاكتشاف: 🎮 OCR (تحليل صورة الشاشة)"
+                                )
+                            } else {
+                                val ocrTexts = ocrResult.allDetectedTextsInRegion
+                                if (ocrTexts.isNotEmpty()) {
+                                    val listStr = ocrTexts.mapIndexed { i, t -> "${i + 1}. \"$t\"" }.joinToString("\n")
+                                    showInspectResultModal(
+                                        "❌",
+                                        "لم يتم العثور على '$targetText'",
+                                        "❌ لم يتم العثور على '$targetText' ($matchTypeLabel)!\n\n🎮 النصوص المكتشفة عبر OCR (تحليل الصورة):\n$listStr\n\n💡 يمكنك نسخ نص منها.",
+                                        copyText = ocrTexts.firstOrNull()
+                                    )
+                                } else {
+                                    showInspectResultModal(
+                                        "⚠️",
+                                        "لم يتم اكتشاف نصوص",
+                                        "❌ لم يتم العثور على أي نصوص (لا عادية ولا OCR).\n\n💡 استخدم '📸 فحص صورة' أو '🎮 نقر مباشر'."
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -811,11 +838,30 @@ class FloatingStudioOverlay(
                 copyText = texts.firstOrNull()
             )
         } else {
-            showInspectResultModal(
-                "⚠️",
-                "ماذا يرى التطبيق؟",
-                "⚠️ لا توجد أي نصوص برمجية داخل هذا المربع حالياً.\n\n💡 ملاحظة للألعاب (مثل فورتنايت): أزرار وشاشات الألعاب ثلاثية الأبعاد هي رسومات GPU وليست نصوص أندرويد عادية؛ استخدم '📸 فحص صورة' أو '🎮 نقر مباشر'."
-            )
+            // Try OCR fallback for games
+            Toast.makeText(context, "لم يتم العثور على نصوص عادية. جاري فحص OCR للألعاب...", Toast.LENGTH_SHORT).show()
+            CoroutineScope(Dispatchers.Main).launch {
+                studioView?.visibility = View.INVISIBLE
+                delay(160)
+                val ocrResult = accService.findTextWithOCR("", false, inspectionRect)
+                studioView?.visibility = View.VISIBLE
+                val ocrTexts = ocrResult.allDetectedTextsInRegion
+                if (ocrTexts.isNotEmpty()) {
+                    val listStr = ocrTexts.mapIndexed { i, t -> "${i + 1}. \"$t\"" }.joinToString("\n")
+                    showInspectResultModal(
+                        "🎮",
+                        "نصوص مكتشفة بـ OCR (تعرف الصورة) (${ocrTexts.size})",
+                        "🎮 تم اكتشاف النصوص التالية عبر تحليل الصورة (OCR):\n\n$listStr\n\n💡 هذه النصوص مرسومة كصورة (مثل ألعاب فورتنايت). يمكنك استخدامها كشرط.",
+                        copyText = ocrTexts.firstOrNull()
+                    )
+                } else {
+                    showInspectResultModal(
+                        "⚠️",
+                        "ماذا يرى التطبيق؟",
+                        "⚠️ لا توجد أي نصوص في هذا المربع (لا نصوص عادية ولا OCR).\n\n💡 استخدم '📸 فحص صورة' أو '🎮 نقر مباشر' للألعاب."
+                    )
+                }
+            }
         }
     }
 

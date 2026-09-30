@@ -250,6 +250,138 @@ class AutoClickerAccessibilityService : AccessibilityService() {
     }
 
     /**
+     * OCR-based text scanning using Google ML Kit (for games that render text as GPU graphics)
+     * Captures screenshot, crops to region, runs ML Kit text recognition
+     */
+    suspend fun findTextWithOCR(targetText: String, exactMatch: Boolean, searchRegion: Rect? = null): TextScanDetails {
+        val bitmap = captureScreen() ?: return TextScanDetails(false, null, null, emptyList())
+        return runOcrOnBitmap(bitmap, targetText, exactMatch, searchRegion)
+    }
+
+    /**
+     * OCR-based text coordinate finder (simpler version)
+     */
+    suspend fun findTextCoordsWithOCR(targetText: String, exactMatch: Boolean, searchRegion: Rect? = null): Rect? {
+        val result = findTextWithOCR(targetText, exactMatch, searchRegion)
+        return result.coordinates
+    }
+
+    /**
+     * Runs ML Kit OCR on a bitmap and searches for target text
+     */
+    private suspend fun runOcrOnBitmap(
+        screenBitmap: android.graphics.Bitmap,
+        targetText: String,
+        exactMatch: Boolean,
+        searchRegion: Rect?
+    ): TextScanDetails = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.Default) {
+        try {
+            // Crop to search region if specified
+            val offsetX: Int
+            val offsetY: Int
+            val bitmapToScan: android.graphics.Bitmap
+            if (searchRegion != null && searchRegion.width() > 10 && searchRegion.height() > 10) {
+                val left = searchRegion.left.coerceIn(0, screenBitmap.width - 1)
+                val top = searchRegion.top.coerceIn(0, screenBitmap.height - 1)
+                val right = searchRegion.right.coerceIn(left + 1, screenBitmap.width)
+                val bottom = searchRegion.bottom.coerceIn(top + 1, screenBitmap.height)
+                bitmapToScan = android.graphics.Bitmap.createBitmap(screenBitmap, left, top, right - left, bottom - top)
+                offsetX = left
+                offsetY = top
+            } else {
+                bitmapToScan = screenBitmap
+                offsetX = 0
+                offsetY = 0
+            }
+
+            val inputImage = com.google.mlkit.vision.common.InputImage.fromBitmap(bitmapToScan, 0)
+            val recognizer = com.google.mlkit.vision.text.TextRecognition.getClient(
+                com.google.mlkit.vision.text.latin.TextRecognizerOptions.DEFAULT_OPTIONS
+            )
+            val visionText: com.google.mlkit.vision.text.Text = kotlinx.coroutines.suspendCancellableCoroutine { cont ->
+                recognizer.process(inputImage)
+                    .addOnSuccessListener { result ->
+                        if (cont.isActive) cont.resumeWith(Result.success(result))
+                    }
+                    .addOnFailureListener { e ->
+                        if (cont.isActive) cont.resumeWith(Result.failure(e))
+                    }
+            }
+
+            val allDetected = mutableListOf<String>()
+            var matchedRect: Rect? = null
+            var matchedString: String? = null
+
+            val blocks: List<com.google.mlkit.vision.text.Text.TextBlock> = visionText.textBlocks
+            for (block in blocks) {
+                val lines: List<com.google.mlkit.vision.text.Text.Line> = block.lines
+                for (line in lines) {
+                    val lineText: String = line.text.trim()
+                    if (lineText.isNotBlank()) {
+                        allDetected.add(lineText)
+                        if (matchedRect == null && targetText.isNotBlank()) {
+                            val isMatch = if (exactMatch) {
+                                lineText.equals(targetText.trim(), ignoreCase = true)
+                            } else {
+                                lineText.contains(targetText, ignoreCase = true)
+                            }
+                            if (isMatch) {
+                                val box: Rect? = line.boundingBox
+                                if (box != null) {
+                                    matchedRect = Rect(
+                                        box.left + offsetX,
+                                        box.top + offsetY,
+                                        box.right + offsetX,
+                                        box.bottom + offsetY
+                                    )
+                                    matchedString = lineText
+                                }
+                            }
+                        }
+                    }
+                    // Also check individual elements (words)
+                    val elements: List<com.google.mlkit.vision.text.Text.Element> = line.elements
+                    for (element in elements) {
+                        val elemText: String = element.text.trim()
+                        if (elemText.isNotBlank() && matchedRect == null && targetText.isNotBlank()) {
+                            val isMatch = if (exactMatch) {
+                                elemText.equals(targetText.trim(), ignoreCase = true)
+                            } else {
+                                elemText.contains(targetText, ignoreCase = true)
+                            }
+                            if (isMatch) {
+                                val box: Rect? = element.boundingBox
+                                if (box != null) {
+                                    matchedRect = Rect(
+                                        box.left + offsetX,
+                                        box.top + offsetY,
+                                        box.right + offsetX,
+                                        box.bottom + offsetY
+                                    )
+                                    matchedString = elemText
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            recognizer.close()
+            android.util.Log.d("AutoClicker", "OCR scan found ${allDetected.size} texts, match=${matchedRect != null}")
+
+            TextScanDetails(
+                isFound = matchedRect != null,
+                matchedFullText = matchedString,
+                coordinates = matchedRect,
+                allDetectedTextsInRegion = allDetected
+            )
+        } catch (e: Exception) {
+            android.util.Log.e("AutoClicker", "OCR scan error", e)
+            TextScanDetails(false, null, null, emptyList())
+        }
+    }
+
+    /**
      * Injects text directly into the currently focused or editable input field (appending by default)
      */
     fun typeTextIntoFocusedField(text: String, append: Boolean = true): Boolean {

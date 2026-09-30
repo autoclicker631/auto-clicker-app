@@ -6,10 +6,10 @@ param (
     [int]$VersionCode = 2,
 
     [Parameter(Mandatory=$false)]
-    [bool]$ForceUpdate = $false,
+    [bool]$ForceUpdate = $true,
 
     [Parameter(Mandatory=$false)]
-    [string]$ReleaseNotes = "• تحسينات عامة في الأداء والسرعة`n• إصلاح كافة المشاكل السابقة"
+    [string]$ReleaseNotes = "• دعم قراءة وتحليل نصوص الألعاب (مثل فورتنايت) بواسطة التعرف الضوئي الذكي (ML Kit OCR)`n• إرسال إشارات كيبورد وهمي تتعرف عليها الألعاب كأنها كيبورد حقيقي متصل بالجهاز`n• تحسينات واستقرار في استوديو الشروط وتصميم الواجهة"
 )
 
 $tokenFile = Join-Path $PSScriptRoot "github_token.txt"

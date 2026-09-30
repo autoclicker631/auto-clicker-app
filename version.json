@@ -1,10 +1,10 @@
 {
-  "latestVersionCode": 1,
-  "latestVersionName": "1.0",
-  "minSupportedVersionCode": 1,
-  "isForceUpdate": false,
-  "title": "تحديث جديد متوفر 🚀",
-  "releaseNotes": "• إضافة ميزة السحب والتمرير (Swipe / Scroll)\n• إضافة نظام التحديث التلقائي المباشر داخل التطبيق\n• تحسين أداء استوديو الشروط وإمكانية إخفاء كافة القوائم لمعاينة الشاشة\n• عزل كامل بين واجهة التطبيق وقراءة نصوص الألعاب",
-  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.0.0/AutoClicker-v1.0.0.apk",
-  "publishDate": "2026-09-29"
+  "latestVersionCode": 2,
+  "latestVersionName": "1.1.0",
+  "minSupportedVersionCode": 2,
+  "isForceUpdate": true,
+  "title": "تحديث جديد متوفر v1.1.0 🚀",
+  "releaseNotes": "• دعم قراءة وتحليل نصوص الألعاب (مثل فورتنايت) بواسطة التعرف الضوئي الذكي (ML Kit OCR)\n• إرسال إشارات كيبورد وهمي تتعرف عليها الألعاب كأنها كيبورد حقيقي متصل بالجهاز\n• تحسينات واستقرار في استوديو الشروط وتصميم الواجهة",
+  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.1.0/AutoClicker-v1.1.0.apk",
+  "publishDate": "2026-09-30"
 }

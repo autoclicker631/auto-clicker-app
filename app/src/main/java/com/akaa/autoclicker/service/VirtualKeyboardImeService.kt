@@ -22,8 +22,25 @@ class VirtualKeyboardImeService : InputMethodService() {
 
         fun sendKeyEvent(keyCode: Int): Boolean {
             val ic = activeInstance?.currentInputConnection ?: return false
-            ic.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, keyCode))
-            ic.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, keyCode))
+            val downTime = android.os.SystemClock.uptimeMillis()
+            val downEvent = KeyEvent(
+                downTime, downTime,
+                KeyEvent.ACTION_DOWN, keyCode, 0, 0,
+                android.view.KeyCharacterMap.VIRTUAL_KEYBOARD,
+                0,
+                KeyEvent.FLAG_FROM_SYSTEM,
+                android.view.InputDevice.SOURCE_KEYBOARD
+            )
+            val upEvent = KeyEvent(
+                downTime, android.os.SystemClock.uptimeMillis(),
+                KeyEvent.ACTION_UP, keyCode, 0, 0,
+                android.view.KeyCharacterMap.VIRTUAL_KEYBOARD,
+                0,
+                KeyEvent.FLAG_FROM_SYSTEM,
+                android.view.InputDevice.SOURCE_KEYBOARD
+            )
+            ic.sendKeyEvent(downEvent)
+            ic.sendKeyEvent(upEvent)
             return true
         }
     }

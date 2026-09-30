@@ -151,14 +151,27 @@ class ScriptExecutorEngine(
 
             ConditionType.TEXT_EXISTS -> {
                 if (accService == null) return ConditionResult(false)
+                // Try Accessibility text scan first
                 val rect = accService.findTextCoordinates(rule.targetText, rule.matchExact, searchRegion)
-                ConditionResult(rect != null, rect)
+                if (rect != null) {
+                    ConditionResult(true, rect)
+                } else {
+                    // Fallback to OCR for games (GPU-rendered text)
+                    val ocrRect = accService.findTextCoordsWithOCR(rule.targetText, rule.matchExact, searchRegion)
+                    ConditionResult(ocrRect != null, ocrRect)
+                }
             }
 
             ConditionType.TEXT_NOT_EXISTS -> {
                 if (accService == null) return ConditionResult(false)
                 val rect = accService.findTextCoordinates(rule.targetText, rule.matchExact, searchRegion)
-                ConditionResult(rect == null)
+                if (rect != null) {
+                    ConditionResult(false)
+                } else {
+                    // Also check with OCR
+                    val ocrRect = accService.findTextCoordsWithOCR(rule.targetText, rule.matchExact, searchRegion)
+                    ConditionResult(ocrRect == null)
+                }
             }
 
             ConditionType.IMAGE_EXISTS -> {
