@@ -55,6 +55,14 @@ class FloatingOverlayService : Service() {
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "FloatingOverlayService onCreate() started")
+
+        // Force update safety check
+        if (com.akaa.autoclicker.update.AppUpdateManager.isForceUpdateActive) {
+            Toast.makeText(this, "التطبيق بحاجة إلى تحديث إجباري للمتابعة!", Toast.LENGTH_LONG).show()
+            stopSelf()
+            return
+        }
+
         isRunning = true
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         preferencesManager = PreferencesManager(this)
@@ -198,6 +206,12 @@ class FloatingOverlayService : Service() {
 
     private fun setupButtonListeners() {
         binding?.btnFloatingPlayPause?.setOnClickListener {
+            if (com.akaa.autoclicker.update.AppUpdateManager.isForceUpdateActive) {
+                Toast.makeText(this, "يرجى تثبيت التحديث الإجباري للمتابعة", Toast.LENGTH_SHORT).show()
+                stopSelf()
+                return@setOnClickListener
+            }
+
             if (!AutoClickerAccessibilityService.isServiceRunning) {
                 Toast.makeText(this, "يرجى تفعيل خدمة إمكانية الوصول (Accessibility) من إعدادات الهاتف لتنفيذ النقرات!", Toast.LENGTH_LONG).show()
                 val intent = Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS).apply {

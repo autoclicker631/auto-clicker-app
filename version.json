@@ -1,10 +1,10 @@
 {
-  "latestVersionCode": 2,
-  "latestVersionName": "1.1.0",
-  "minSupportedVersionCode": 2,
+  "latestVersionCode": 3,
+  "latestVersionName": "1.2.0",
+  "minSupportedVersionCode": 3,
   "isForceUpdate": true,
-  "title": "تحديث جديد متوفر v1.1.0 🚀",
-  "releaseNotes": "• دعم قراءة وتحليل نصوص الألعاب (مثل فورتنايت) بواسطة التعرف الضوئي الذكي (ML Kit OCR)\n• إرسال إشارات كيبورد وهمي تتعرف عليها الألعاب كأنها كيبورد حقيقي متصل بالجهاز\n• تحسينات واستقرار في استوديو الشروط وتصميم الواجهة",
-  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.1.0/AutoClicker-v1.1.0.apk",
+  "title": "تحديث جديد متوفر v1.2.0 🚀",
+  "releaseNotes": "• إصلاحات شاملة لنظام التحديث الإجباري ومنع التخطي\n• الاحتفاظ بملف التحديث المكتمل لتجنب إعادة التنزيل من جديد\n• حذف ملف التحديث تلقائياً بعد التثبيت لتوفير مساحة التخزين\n• تحسين استقرار وسرعة استجابة الأداة العائمة",
+  "downloadUrl": "https://github.com/autoclicker631/auto-clicker-app/releases/download/v1.2.0/AutoClicker-v1.2.0.apk",
   "publishDate": "2026-09-30"
 }

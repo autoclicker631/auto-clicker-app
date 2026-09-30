@@ -44,8 +44,28 @@ class MainActivity : AppCompatActivity() {
 
         setupBottomNavigation()
 
-        // Check for updates on startup
+        // Clean up old updates and check for updates on startup
+        com.akaa.autoclicker.update.AppUpdateManager.cleanupOldUpdates(this)
         com.akaa.autoclicker.update.AppUpdateManager.checkAndPromptOnLaunch(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // If an update was just installed, clean up leftover update files
+        com.akaa.autoclicker.update.AppUpdateManager.cleanupOldUpdates(this)
+
+        // If a force update is required and user returned without updating, re-enforce update dialog
+        if (com.akaa.autoclicker.update.AppUpdateManager.isForceUpdateActive) {
+            val forceInfo = com.akaa.autoclicker.update.AppUpdateManager.activeForceUpdateInfo
+            if (forceInfo != null) {
+                // Ensure floating service is stopped
+                if (com.akaa.autoclicker.service.FloatingOverlayService.isRunning) {
+                    val serviceIntent = android.content.Intent(this, com.akaa.autoclicker.service.FloatingOverlayService::class.java)
+                    stopService(serviceIntent)
+                }
+                com.akaa.autoclicker.update.AppUpdateManager.showUpdateDialog(this, forceInfo, isForce = true)
+            }
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

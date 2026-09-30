@@ -11,15 +11,16 @@ from datetime import datetime
 if sys.stdout and hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8')
 
-VERSION_NAME = "1.1.0"
-VERSION_CODE = 2
+VERSION_NAME = "1.2.0"
+VERSION_CODE = 3
 IS_FORCE_UPDATE = True
 REPO = "autoclicker631/auto-clicker-app"
 
 RELEASE_NOTES = (
-    "• دعم قراءة وتحليل نصوص الألعاب (مثل فورتنايت) بواسطة التعرف الضوئي الذكي (ML Kit OCR)\n"
-    "• إرسال إشارات كيبورد وهمي تتعرف عليها الألعاب كأنها كيبورد حقيقي متصل بالجهاز\n"
-    "• تحسينات واستقرار في استوديو الشروط وتصميم الواجهة"
+    "• إصلاحات شاملة لنظام التحديث الإجباري ومنع التخطي\n"
+    "• الاحتفاظ بملف التحديث المكتمل لتجنب إعادة التنزيل من جديد\n"
+    "• حذف ملف التحديث تلقائياً بعد التثبيت لتوفير مساحة التخزين\n"
+    "• تحسين استقرار وسرعة استجابة الأداة العائمة"
 )
 
 # 1. Update app/build.gradle.kts

@@ -1,0 +1,12 @@
+build/
+.gradle/
+*.apk
+*.dex
+*.jar
+*.aar
+app/build/
+.idea/
+.git/
+*.log
+github_token.txt
+publish.py

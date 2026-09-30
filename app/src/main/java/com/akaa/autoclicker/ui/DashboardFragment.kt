@@ -113,6 +113,16 @@ class DashboardFragment : Fragment() {
 
     private fun setupFloatingServiceButton() {
         binding.btnHeroToggleService.setOnClickListener {
+            // Check for force update block
+            if (com.akaa.autoclicker.update.AppUpdateManager.isForceUpdateActive) {
+                val forceInfo = com.akaa.autoclicker.update.AppUpdateManager.activeForceUpdateInfo
+                if (forceInfo != null) {
+                    Toast.makeText(requireContext(), "لا يمكن تشغيل الأداة، يجب تثبيت التحديث الإجباري أولاً!", Toast.LENGTH_LONG).show()
+                    com.akaa.autoclicker.update.AppUpdateManager.showUpdateDialog(requireActivity(), forceInfo, isForce = true)
+                }
+                return@setOnClickListener
+            }
+
             if (FloatingOverlayService.isRunning) {
                 val serviceIntent = Intent(requireContext(), FloatingOverlayService::class.java)
                 requireContext().stopService(serviceIntent)
