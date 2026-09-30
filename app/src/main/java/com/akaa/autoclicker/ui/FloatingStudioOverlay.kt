@@ -57,6 +57,18 @@ class FloatingStudioOverlay(
     private var capturedImageBase64: String? = null
     private var isImageConditionMode = false
 
+    private fun updateRegionBounds() {
+        val regionBox = binding?.boxInspectionRegion ?: return
+        val location = IntArray(2)
+        regionBox.getLocationOnScreen(location)
+        if (regionBox.width > 0 && regionBox.height > 0) {
+            regionLeft = location[0].coerceAtLeast(0)
+            regionTop = location[1].coerceAtLeast(0)
+            regionWidth = regionBox.width
+            regionHeight = regionBox.height
+        }
+    }
+
     fun show() {
         hide()
         try {
@@ -97,6 +109,13 @@ class FloatingStudioOverlay(
             addNewTargetPoint(defaultX, defaultY)
 
             windowManager.addView(studioView, params)
+
+            binding?.boxInspectionRegion?.post {
+                binding?.boxInspectionRegion?.x = regionLeft.toFloat()
+                binding?.boxInspectionRegion?.y = regionTop.toFloat()
+                updateRegionBounds()
+            }
+
             Log.d("AutoClicker", "FloatingStudioOverlay displayed with multi-target & resizable region")
         } catch (e: Exception) {
             Log.e("AutoClicker", "Error displaying FloatingStudioOverlay", e)
@@ -128,8 +147,11 @@ class FloatingStudioOverlay(
                         val newY = (event.rawY + dY).coerceIn(0f, (displayMetrics.heightPixels - v.height).toFloat())
                         v.x = newX
                         v.y = newY
-                        regionLeft = newX.toInt()
-                        regionTop = newY.toInt()
+                        updateRegionBounds()
+                        return true
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        updateRegionBounds()
                         return true
                     }
                 }
@@ -165,9 +187,12 @@ class FloatingStudioOverlay(
                         lp.height = newH
                         regionBox.layoutParams = lp
 
-                        regionWidth = newW
-                        regionHeight = newH
-                        binding?.tvRegionDimensions?.text = "${newW}x${newH}"
+                        updateRegionBounds()
+                        binding?.tvRegionDimensions?.text = "${regionWidth}x${regionHeight}"
+                        return true
+                    }
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                        updateRegionBounds()
                         return true
                     }
                 }
@@ -250,6 +275,12 @@ class FloatingStudioOverlay(
             return
         }
 
+        updateRegionBounds()
+        val currentLeft = regionLeft
+        val currentTop = regionTop
+        val currentWidth = regionWidth
+        val currentHeight = regionHeight
+
         CoroutineScope(Dispatchers.Main).launch {
             // Hide overlay briefly to take screenshot of the underlying app
             studioView?.visibility = View.INVISIBLE
@@ -259,10 +290,14 @@ class FloatingStudioOverlay(
             studioView?.visibility = View.VISIBLE
 
             if (screenBitmap != null) {
-                val safeLeft = regionLeft.coerceIn(0, screenBitmap.width - 1)
-                val safeTop = regionTop.coerceIn(0, screenBitmap.height - 1)
-                val safeWidth = regionWidth.coerceIn(10, screenBitmap.width - safeLeft)
-                val safeHeight = regionHeight.coerceIn(10, screenBitmap.height - safeTop)
+                val displayMetrics = context.resources.displayMetrics
+                val scaleX = screenBitmap.width.toFloat() / displayMetrics.widthPixels.toFloat()
+                val scaleY = screenBitmap.height.toFloat() / displayMetrics.heightPixels.toFloat()
+
+                val safeLeft = (currentLeft * scaleX).toInt().coerceIn(0, screenBitmap.width - 1)
+                val safeTop = (currentTop * scaleY).toInt().coerceIn(0, screenBitmap.height - 1)
+                val safeWidth = (currentWidth * scaleX).toInt().coerceIn(10, screenBitmap.width - safeLeft)
+                val safeHeight = (currentHeight * scaleY).toInt().coerceIn(10, screenBitmap.height - safeTop)
 
                 val cropped = android.graphics.Bitmap.createBitmap(
                     screenBitmap,
@@ -694,6 +729,8 @@ class FloatingStudioOverlay(
             return
         }
 
+        updateRegionBounds()
+
         if (isImageConditionMode) {
             if (capturedImageBase64.isNullOrBlank()) {
                 showInspectResultModal(
@@ -706,6 +743,11 @@ class FloatingStudioOverlay(
 
             Toast.makeText(context, "جاري فحص وتجربة تطابق الصورة على الشاشة...", Toast.LENGTH_SHORT).show()
 
+            val currentLeft = regionLeft
+            val currentTop = regionTop
+            val currentWidth = regionWidth
+            val currentHeight = regionHeight
+
             CoroutineScope(Dispatchers.Main).launch {
                 studioView?.visibility = View.INVISIBLE
                 delay(180)
@@ -714,7 +756,16 @@ class FloatingStudioOverlay(
                 studioView?.visibility = View.VISIBLE
 
                 if (screenBitmap != null) {
-                    val searchRegion = android.graphics.Rect(regionLeft, regionTop, regionLeft + regionWidth, regionTop + regionHeight)
+                    val displayMetrics = context.resources.displayMetrics
+                    val scaleX = screenBitmap.width.toFloat() / displayMetrics.widthPixels.toFloat()
+                    val scaleY = screenBitmap.height.toFloat() / displayMetrics.heightPixels.toFloat()
+
+                    val safeLeft = (currentLeft * scaleX).toInt().coerceIn(0, screenBitmap.width - 1)
+                    val safeTop = (currentTop * scaleY).toInt().coerceIn(0, screenBitmap.height - 1)
+                    val safeWidth = (currentWidth * scaleX).toInt().coerceIn(10, screenBitmap.width - safeLeft)
+                    val safeHeight = (currentHeight * scaleY).toInt().coerceIn(10, screenBitmap.height - safeTop)
+
+                    val searchRegion = android.graphics.Rect(safeLeft, safeTop, safeLeft + safeWidth, safeTop + safeHeight)
                     val templateBitmap = ImageMatcher.base64ToBitmap(capturedImageBase64!!)
                     if (templateBitmap != null) {
                         val (isMatched, score) = ImageMatcher.computeSimilarityScore(screenBitmap, templateBitmap, searchRegion)
@@ -744,8 +795,9 @@ class FloatingStudioOverlay(
             val exactMatch = binding?.cbExactMatch?.isChecked == true
             val matchTypeLabel = if (exactMatch) "تطابق تام (Exact)" else "تطابق جزئي (Contains)"
 
+            val inspectionRect = android.graphics.Rect(regionLeft, regionTop, regionLeft + regionWidth, regionTop + regionHeight)
+
             if (targetText.isEmpty()) {
-                val inspectionRect = android.graphics.Rect(regionLeft, regionTop, regionLeft + regionWidth, regionTop + regionHeight)
                 val scanDetails = accService.findTextWithDetails("", false, inspectionRect)
                 val detected = scanDetails.allDetectedTextsInRegion
                 val info = if (detected.isNotEmpty()) {
@@ -759,7 +811,6 @@ class FloatingStudioOverlay(
                     copyText = detected.firstOrNull()
                 )
             } else {
-                val inspectionRect = android.graphics.Rect(regionLeft, regionTop, regionLeft + regionWidth, regionTop + regionHeight)
                 val scanDetails = accService.findTextWithDetails(targetText, exactMatch, inspectionRect)
 
                 if (scanDetails.isFound) {
@@ -825,6 +876,7 @@ class FloatingStudioOverlay(
             return
         }
 
+        updateRegionBounds()
         val inspectionRect = android.graphics.Rect(regionLeft, regionTop, regionLeft + regionWidth, regionTop + regionHeight)
         val scanDetails = accService.findTextWithDetails("", false, inspectionRect)
         val texts = scanDetails.allDetectedTextsInRegion
@@ -873,6 +925,8 @@ class FloatingStudioOverlay(
             Toast.makeText(context, "يرجى إضافة نقطة نقر واحدة على الأقل!", Toast.LENGTH_SHORT).show()
             return
         }
+
+        updateRegionBounds()
 
         val scriptNameInput = binding?.etStudioScriptName?.text?.toString()?.trim() ?: ""
         val ruleNameInput = binding?.etStudioRuleName?.text?.toString()?.trim() ?: ""

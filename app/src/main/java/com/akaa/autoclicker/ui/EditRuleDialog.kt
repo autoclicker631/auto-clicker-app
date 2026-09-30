@@ -121,11 +121,12 @@ class EditRuleDialog(
                 val actionTypeOptions = listOf(
                     "👆 1. نقر على إحداثيات (X, Y)",
                     "🔤 2. نقر مباشر على النص المكتشف",
-                    "⌨️ 3. كتابة نص (كيبورد وهمي)",
-                    "↵ 4. إرسال زر Enter",
-                    "⏱️ 5. ضغط مطول / سحب (Swipe)",
-                    "⏳ 6. تأخير زمني فقط",
-                    "❌ 7. إغلاق البرامج المفتوحة والرجوع للرئيسية"
+                    "⌨️ 3. كتابة نص / ضغط مفتاح",
+                    "↵ 4. إرسال زر كيبورد (Space, Enter, W...)",
+                    "🎮 5. ضغط مفتاح + لمس احتياطي (للألعاب بدون Root!)",
+                    "⏱️ 6. ضغط مطول / سحب (Swipe)",
+                    "⏳ 7. تأخير زمني فقط",
+                    "❌ 8. إغلاق البرامج المفتوحة والرجوع للرئيسية"
                 )
                 val itemActionAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, actionTypeOptions)
                 itemBinding.spinnerItemActionType.adapter = itemActionAdapter
@@ -136,18 +137,22 @@ class EditRuleDialog(
                         val selected = ActionType.entries[pos]
                         action.actionType = selected
                         itemBinding.layoutItemCoordinates.visibility = if (
-                            selected == ActionType.CLICK_COORDINATE || selected == ActionType.SWIPE
+                            selected == ActionType.CLICK_COORDINATE ||
+                            selected == ActionType.SWIPE ||
+                            selected == ActionType.GAME_KEY_OR_TOUCH  // needs coordinates for touch fallback
                         ) View.VISIBLE else View.GONE
 
                         itemBinding.layoutItemTextToType.visibility = if (
-                            selected == ActionType.TYPE_TEXT
+                            selected == ActionType.TYPE_TEXT ||
+                            selected == ActionType.GAME_KEY_OR_TOUCH  // needs text for key mapping (e.g. " " → Space)
                         ) View.VISIBLE else View.GONE
 
                         val summary = when (selected) {
                             ActionType.CLICK_COORDINATE -> "نقر على إحداثيات (${action.clickX}, ${action.clickY})"
                             ActionType.CLICK_DETECTED_TEXT -> "نقر على النص المكتشف"
-                            ActionType.TYPE_TEXT -> "كتابة نص بالكيبورد"
-                            ActionType.SEND_KEY_CODE -> "إرسال زر كيبورد [Enter]"
+                            ActionType.TYPE_TEXT -> "⌨️ كتابة/ضغط مفتاح"
+                            ActionType.SEND_KEY_CODE -> "إرسال زر كيبورد [keyCode=${action.keyCode}]"
+                            ActionType.GAME_KEY_OR_TOUCH -> "🎮 مفتاح '${action.textToType}' أو لمس (${action.clickX}, ${action.clickY})"
                             ActionType.SWIPE -> "ضغط مطول / سحب شاشة"
                             ActionType.DELAY_ONLY -> "تأخير زمني"
                             ActionType.CLOSE_RECENT_APPS -> "إغلاق التطبيقات"

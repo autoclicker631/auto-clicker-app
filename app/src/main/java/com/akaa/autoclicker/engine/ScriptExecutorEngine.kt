@@ -186,13 +186,25 @@ class ScriptExecutorEngine(
                         if (screen == null) {
                             ConditionResult(false)
                         } else {
+                            val displayMetrics = accService.resources.displayMetrics
+                            val scaleX = screen.width.toFloat() / displayMetrics.widthPixels.toFloat()
+                            val scaleY = screen.height.toFloat() / displayMetrics.heightPixels.toFloat()
+
+                            val scaledRegion = if (searchRegion != null) {
+                                val sLeft = (searchRegion.left * scaleX).toInt().coerceIn(0, screen.width - 1)
+                                val sTop = (searchRegion.top * scaleY).toInt().coerceIn(0, screen.height - 1)
+                                val sRight = (searchRegion.right * scaleX).toInt().coerceIn(sLeft + 1, screen.width)
+                                val sBottom = (searchRegion.bottom * scaleY).toInt().coerceIn(sTop + 1, screen.height)
+                                Rect(sLeft, sTop, sRight, sBottom)
+                            } else null
+
                             val isMatched = com.akaa.autoclicker.utils.ImageMatcher.matchTemplate(
                                 screenBitmap = screen,
                                 templateBitmap = template,
-                                searchRegion = searchRegion,
+                                searchRegion = scaledRegion,
                                 threshold = rule.imageThreshold
                             )
-                            ConditionResult(isMatched, searchRegion)
+                            ConditionResult(isMatched, scaledRegion)
                         }
                     }
                 }
@@ -234,7 +246,10 @@ class ScriptExecutorEngine(
             }
 
             ActionType.TYPE_TEXT -> {
-                val textSuccess = VirtualKeyboardManager.typeText(action.textToType)
+                val textToSend = action.textToType
+                android.util.Log.d("ScriptEngine", "TYPE_TEXT action: text='$textToSend', canSendAsKeys=${VirtualKeyboardManager.canSendAsKeyEvents(textToSend)}")
+                val textSuccess = VirtualKeyboardManager.typeText(textToSend)
+                android.util.Log.d("ScriptEngine", "TYPE_TEXT result: success=$textSuccess")
                 if (!textSuccess && action.clickX > 0 && action.clickY > 0) {
                     var targetX = action.clickX
                     var targetY = action.clickY
@@ -258,6 +273,45 @@ class ScriptExecutorEngine(
                         targetY += Random.nextInt(-3, 4)
                     }
                     accService?.performClick(targetX, targetY)
+                }
+            }
+
+            ActionType.GAME_KEY_OR_TOUCH -> {
+                // 🎮 Smart Game Action: tries key injection first, ALWAYS falls back to touch.
+                // This is the recommended action for games on non-rooted devices.
+                //
+                // Example: User configures textToType=" " (space) + clickX/clickY on Jump button
+                //   → With ADB/Root: sends KEYCODE_SPACE (game responds to keyboard)
+                //   → Without ADB/Root: taps the Jump button on screen (game responds to touch)
+                var keySuccess = false
+
+                // Try to send as key event if text is configured
+                val textForKey = action.textToType
+                if (textForKey.isNotEmpty() && VirtualKeyboardManager.canSendAsKeyEvents(textForKey)) {
+                    android.util.Log.d("ScriptEngine", "GAME_KEY_OR_TOUCH: trying key events for '$textForKey'")
+                    keySuccess = VirtualKeyboardManager.sendTextAsKeyEvents(textForKey)
+                } else if (action.keyCode > 0) {
+                    // Fallback to explicit keyCode
+                    android.util.Log.d("ScriptEngine", "GAME_KEY_OR_TOUCH: trying keyCode=${action.keyCode}")
+                    keySuccess = VirtualKeyboardManager.sendKeyCode(action.keyCode)
+                }
+
+                // ALWAYS fall back to touch if key injection failed
+                if (!keySuccess) {
+                    android.util.Log.d("ScriptEngine", "GAME_KEY_OR_TOUCH: key injection unavailable, using touch at (${action.clickX}, ${action.clickY})")
+                    if (action.clickX > 0 && action.clickY > 0) {
+                        var targetX = action.clickX
+                        var targetY = action.clickY
+                        if (useHumanTouch) {
+                            targetX += Random.nextInt(-3, 4)
+                            targetY += Random.nextInt(-3, 4)
+                        }
+                        accService?.performClick(targetX, targetY)
+                    } else {
+                        android.util.Log.w("ScriptEngine", "GAME_KEY_OR_TOUCH: no touch coordinates configured! Set X,Y on the game button.")
+                    }
+                } else {
+                    android.util.Log.d("ScriptEngine", "GAME_KEY_OR_TOUCH: key event sent successfully!")
                 }
             }
 
